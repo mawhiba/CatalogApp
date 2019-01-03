@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<style>
+* {
+  box-sizing: border-box;
+}
+
+/* Create two equal columns that floats next to each other */
+.column {
+  float: left;
+  width: 50%;
+  padding: 10px;
+  height: 300px; /* Should be removed. Only for demonstration */
+}
+
+/* Clear floats after the columns */
+.row:after {
+  content: "";
+  display: table;
+  clear: both;
+}
+</style>
+</head>
+<body>
+
+
+{% extends "main.html" %}
+{% block content %}
+{% include "header.html" %}
+
+	<div class="row divider blue">
+		<div class="col-md-12"></div>
+	</div>
+	<div class="row banner main">
+		<div class="col-md-1"></div>
+		<div class="col-md-11 padding-none">
+			<h1>Catalog App</h1>
+		</div>
+	</div>
+
+	<div class = 'flash'>
+      {% with messages = get_flashed_messages() %}
+          {% if messages %}
+            <ul>
+               {% for message in messages %}
+                   <li> <strong> {{ message }} </strong> </li>
+               {% endfor %}
+            </ul>
+        {% endif %}
+      {% endwith %}
+  </div>
+
+
+
+	<div class="row padding-top padding-bottom">
+		<div class="col-md-1"></div>
+		<div class="col-md-10 padding-none">
+
+		</div>
+		<div class="col-md-1"></div>
+	  </div>
+
+<div class="row">
+  <div class="column">
+      {% for category in categories %}
+        <div class="row">
+            <div class="col-md-1"></div>
+                <div class="col-md-10 category-list">
+                  <a href="{{url_for('showCategoryItemList', category_id = category.id)}}" style="font-size:120%; line-height: 1.8;">{{category.name}}</a>
+    					  </div>
+    				<div class="col-md-1"></div>
+    		</div>
+      {% endfor %}
+ </div>
+
+ <div class="column">
+  {% for categoryItem in categoryItems %}
+    <div class="row">
+				<div class="col-md-1"></div>
+				    <div class="col-md-10 category-list">
+              <a href="{{url_for('showItemInfo', category_id = categoryItem.category.id, item_id = categoryItem.id)}}" style="font-size:120%; line-height: 1.8;">{{categoryItem.name}}</a>
+        </div>
+			  <div class="col-md-1"></div>
+		</div>
+    {% endfor %}
+
+    </div>
+</div>
+
+
+{% endblock %}
+
+</body>
+</html>

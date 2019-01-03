@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html>
+	<head>
+	</head>
+	<body>
+
+		{% extends "main.html" %}
+		{% block content %}
+		{% include "header.html" %}
+			<div class="row divider green">
+				<div class="col-md-12"></div>
+			</div>
+			<div class="row banner menu">
+				<div class="col-md-11 col-md-offset-1 padding-none">
+					<h1>{{ category.name }}</h1>
+				</div>
+			</div>
+
+		<div class = 'flash'>
+				      {% with messages = get_flashed_messages() %}
+		      {% if messages %}
+
+		        <ul>
+		        {% for message in messages %}
+		            <li> <strong> {{ message }} </strong> </li>
+		        {% endfor %}
+		        </ul>
+		        {% endif %}
+		    {% endwith %}
+			</div>
+
+
+<br>
+
+        {% for categoryItem in categoryItems %}
+				<div class="row">
+						<div class="col-md-1"></div>
+						<div class="col-md-10 category-list">
+								<a href="{{url_for('showItemInfo', category_id = category.id, item_id = categoryItem.id)}}" style="font-size:120%; line-height: 1.8;">{{categoryItem.name}}</a>
+	          </div>
+				    <div class="col-md-1"></div>
+			  </div>
+
+        {% endfor %}
+				<div class="col-md-6 text-right">
+						{%if 'username' not in session %}
+						    <a href = "{{url_for('showCategories')}}" style="font-size:120%;">Back</a>
+						{% else %}
+								<a method="POST" href = "{{url_for('newItem', category_id = category.id)}}" style="font-size:120%;">Add new item</a>&nbsp&nbsp
+								<a href = "{{url_for('showCategories')}}" style="font-size:120%;">Back</a>
+						{% endif %}
+				</div>
+						{% endblock %}
+
+</body>
+</html>
