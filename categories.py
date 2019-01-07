@@ -92,10 +92,10 @@ session.add(categoryItem8)
 session.commit()
 
 
-categoryItem9 = CategoryItem(user_id=1, name="Pasta", description="Pasta is a perfect foundation for healthy, nutritious and satisfying meals: pasta is generally eaten with nutrient-dense food partners, such as fiber-filled vegetables and beans, heart healthy fish and monounsaturated oils, antioxidant-rich tomato sauce and protein-packed cheeses, poultry and lean meats.", category=category3)
-
-session.add(categoryItem9)
-session.commit()
+# categoryItem9 = CategoryItem(user_id=1, name="Pasta", description="Pasta is a perfect foundation for healthy, nutritious and satisfying meals: pasta is generally eaten with nutrient-dense food partners, such as fiber-filled vegetables and beans, heart healthy fish and monounsaturated oils, antioxidant-rich tomato sauce and protein-packed cheeses, poultry and lean meats.", category=category3)
+#
+# session.add(categoryItem9)
+# session.commit()
 
 
 
