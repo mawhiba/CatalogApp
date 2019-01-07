@@ -148,8 +148,8 @@
            APPLICATION_NAME = "Item Catalog"
 
       - Edit the engin line and add these line to database_setup.py file and categories.py file also:
-          POSTGRES = { 'user': 'catalog', 'pw': 'catalogdb', 'db': 'catalog', 'host': 'localhost', 'port': '5432', }
-          engine = create_engine('postgresql://%(user)s:%(pw)s@%(host)s:%(port)s/%(db)s' % POSTGRES)
+          POSTGRES = { 'user': 'catalog', 'pw': 'mawhiba123', 'db': 'catalog', 'host': 'localhost', }
+          engine = create_engine('postgresql://%(user)s:%(pw)s@%(host)s/%(db)s' % POSTGRES)
 
       - UPLOAD_FOLDER = '/var/www/catalog/catalog/static/image'
         APP_PATH = '/var/www/catalog/catalog/'

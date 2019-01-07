@@ -62,7 +62,7 @@ class CategoryItem(Base):
         }
 
 
-POSTGRES = { 'user': 'catalog', 'pw': 'catalogdb', 'db': 'catalog', 'host': 'localhost', }
+POSTGRES = { 'user': 'catalog', 'pw': 'mawhiba123', 'db': 'catalog', 'host': 'localhost', }
 engine = create_engine('postgresql://%(user)s:%(pw)s@%(host)s/%(db)s' % POSTGRES)
 #engine = create_engine('sqlite:///itemcatalog.db')
 
