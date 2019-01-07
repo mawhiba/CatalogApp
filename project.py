@@ -16,11 +16,11 @@ import requests
 
 app = Flask(__name__)
 
-UPLOAD_FOLDER = '/var/www/CatalogApp/static/image'
 APP_PATH = '/var/www/CatalogApp/'
+UPLOAD_FOLDER = APP_PATH + 'static/image'
 
 CLIENT_ID = json.loads(
-    open('/var/www/CatalogApp/client_secrets.json', 'r').read())['web']['client_id']
+    open(APP_PATH + 'client_secrets.json', 'r').read())['web']['client_id']
 APPLICATION_NAME = "Catalog App 2"
 
 # Connect to Database and create database session
@@ -56,7 +56,7 @@ def gconnect():
 
     try:
         # Upgrade the authorization code into a credentials object
-        oauth_flow = flow_from_clientsecrets('/var/www/CatalogApp/client_secrets.json', scope='')
+        oauth_flow = flow_from_clientsecrets(APP_PATH + 'client_secrets.json', scope='')
         oauth_flow.redirect_uri = 'postmessage'
         credentials = oauth_flow.step2_exchange(code)
     except FlowExchangeError:
@@ -278,7 +278,7 @@ def editItem(category_id, item_id):
         flash('Successfully Edited')
         return redirect(url_for('showItemInfo', category_id=category_id, item_id=item_id))
     else:
-        return render_template('edititem.html', category_id=category_id, item_id=item_id, item=editedItem)
+        return render_template('editItem.html', category_id=category_id, item_id=item_id, item=editedItem)
 
 
 
