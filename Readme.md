@@ -81,24 +81,16 @@
    - Check if no remote connections are allowed sudo vim /etc/postgresql/9.3/main/pg_hba.conf.
    - Login to user postgres : sudo su - postgres.
    - Type : psql.
-   - Create a new database called catalogdb and new user called catalog:
-      postgres=# CREATE DATABASE catalogdb;
+   - Create a new database called catalog and new user called catalog:
+      postgres=# CREATE DATABASE catalog;
       postgres=# CREATE USER catalog;
       postgres=# ALTER ROLE catalog;
-      postgres=# GRANT ALL PRIVILEGES ON DATABASE catalogdb TO catalog;
+      postgres=# GRANT ALL PRIVILEGES ON DATABASE catalog TO catalog;
       Quit postgreSQL postgres=# \q
       Exit from user "postgres" : exit
 
 13. Install git, clone and setup your Catalog App project.
    - Install Git using sudo apt-get install git.
-   - Create a folder catalog under the /var/www directory:
-      cd /var/www
-      sudo mkdir catalog
-      cd catalog
-   - Create another directory under catalog:
-      cd catalog
-      sudo mkdir catalog
-      cd catalog
    - Clone the Catalog from my repository clone https://github.com/mawhiba/CatalogApp
 
 14. Virtualenironment:
@@ -115,44 +107,70 @@
    - sudo python -m pip install Pillow
    - sudo -H python -m pip install oauth2client
 
-- Create a wsgi file under the /var/www/catalog:
-  cd /var/www/catalog
+- Create a wsgi file under the /var/www/:
+  cd /var/www
   sudo touch flaskapp.wsgi
   sudo nano flaskapp.wsgi
   past this code:
-  #!/usr/bin/python
-  import sys
-  import logging
-  logging.basicConfig(stream=sys.stderr)
-  sys.path.insert(0,"/var/www/FlaskApp/")
+      import sys
+      import logging
 
-  from FlaskApp import app as application
-  application.secret_key = 'super_secret_key'
+      logging.basicConfig(stream=sys.stderr)
+      sys.path.insert(0,"/var/www/CatalogApp")
+
+      from project import app as application
+
+      application.secret_key = 'super_secret_key'
 
 - Create apache config file which will interact with the above file when the app is requested as an http:
-  sudo touch /etc/apache2/sites-available/FlaskApp.conf
-  sudo nano /etc/apache2/sites-available/FlaskApp.conf
+  sudo touch /etc/apache2/sites-available/000-default.conf
+  sudo nano /etc/apache2/sites-available/000-default.conf
 
-  <VirtualHost*:80> ServerName 18.185.86.252.xip.io ServerAdmin 18.185.86.252 WSGIDaemonProcess catalog python-path=/var/www/catalog:/var/www/catalog/venv/lib/python2.7/sit$ WSGIProcessGroup catalog  WSGIScriptAlias / /var/www/catalog/flaskapp.wsgi WSGIPassAuthorization On <Directory /var/www/catalog/catalog/> Order allow,deny Allow from all Alias /static /var/www/catalog/catalog/static/ <Directory /var/www/catalog/catalog/static/> Order allow,deny Allow from all ErrorLog ${APACHE_LOG_DIR}/error.log # e.g. LogLevel debug LogLevel debug CustomLog ${APACHE_LOG_DIR}/access.log combined
+  <VirtualHost*:80>
+	ServerName 18.185.86.252.xip.io
+	ServerAdmin 18.185.86.252
 
+	#WSGIDaemonProcess catalog python-path=/var/www/catalog:/var/www/catalog/venv/lib/python2.7/sit$
+	#WSGIProcessGroup catalog
+
+	WSGIScriptAlias / /var/www/flaskapp.wsgi
+
+	#WSGIPassAuthorization On
+	<Directory /var/www/CatalogApp>
+		Order allow,deny
+		Allow from all
+	</Directory>
+	Alias /static /var/www/CatalogApp/static/
+
+	<Directory /var/www/CatalogApp/static/>
+		Order allow,deny
+		Allow from all
+	</Directory>
+
+	ErrorLog ${APACHE_LOG_DIR}/error.log
+	# e.g. LogLevel debug
+	LogLevel debug
+	CustomLog ${APACHE_LOG_DIR}/access.log combined
+ </VirtualHost>
 
 16. Changes in python files:
      In project.py :
          app = Flask(__name__)
-         APP_PATH = '/var/www/catalog/catalog/CatalogApp'
+         APP_PATH = '/var/www/CatalogApp'
          app.secret_key = 'super_secret_key'
 
       - Add the path for json file:
+           APP_PATH = '/var/www/CatalogApp/'
            CLIENT_ID = json.loads(
-           open('/var/www/catalog/catalog/client_secrets.json', 'r').read())['web']['client_id']
-           APPLICATION_NAME = "Item Catalog"
+               open(APP_PATH + 'client_secrets.json', 'r').read())['web']['client_id']
+           APPLICATION_NAME = "Catalog App 2"
 
       - Edit the engin line and add these line to database_setup.py file and categories.py file also:
           POSTGRES = { 'user': 'catalog', 'pw': 'mawhiba123', 'db': 'catalog', 'host': 'localhost', }
           engine = create_engine('postgresql://%(user)s:%(pw)s@%(host)s/%(db)s' % POSTGRES)
 
-      - UPLOAD_FOLDER = '/var/www/catalog/catalog/static/image'
-        APP_PATH = '/var/www/catalog/catalog/'
+      - UPLOAD_FOLDER = '/var/www/static/image'
+        APP_PATH = '/var/www/CatalogApp'
 
       - Remove the debug statment: app.debug = True
 
