@@ -16,12 +16,17 @@ import requests
 
 app = Flask(__name__)
 
+UPLOAD_FOLDER = '/var/www/CatalogApp/static/image'
+APP_PATH = '/var/www/CatalogApp/'
+
 CLIENT_ID = json.loads(
-    open('client_secrets.json', 'r').read())['web']['client_id']
+    open('/var/www/CatalogApp/client_secrets.json', 'r').read())['web']['client_id']
 APPLICATION_NAME = "Catalog App 2"
 
 # Connect to Database and create database session
-engine = create_engine('sqlite:///itemcatalog.db?check_same_thread=false')
+POSTGRES = { 'user': 'catalog', 'pw': 'catalogdb', 'db': 'catalog', 'host': 'localhost', }
+engine = create_engine('postgresql://%(user)s:%(pw)s@%(host)s/%(db)s' % POSTGRES)
+#engine = create_engine('sqlite:///itemcatalog.db?check_same_thread=false')
 Base.metadata.bind = engine
 
 DBSession = sessionmaker(bind=engine)
@@ -293,6 +298,6 @@ def deleteItem(category_id,item_id):
 
 
 if __name__ == '__main__':
-    app.secret_key = 'super_secret_key'
     app.debug = True
-    app.run(host='0.0.0.0', port=8000)
+    app.secret_key = 'super_secret_key'
+    app.run()

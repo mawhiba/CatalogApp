@@ -4,7 +4,11 @@ from sqlalchemy.orm import sessionmaker
 
 from database_setup import Category, Base, CategoryItem, User
 
-engine = create_engine('sqlite:///itemcatalog.db')
+
+POSTGRES = { 'user': 'catalog', 'pw': 'catalogdb', 'db': 'catalog', 'host': 'localhost', }
+engine = create_engine('postgresql://%(user)s:%(pw)s@%(host)s/%(db)s' % POSTGRES)
+
+#engine = create_engine('sqlite:///itemcatalog.db')
 # Bind the engine to the metadata of the Base class so that the
 # declaratives can be accessed through a DBSession instance
 Base.metadata.bind = engine
